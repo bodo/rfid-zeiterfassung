@@ -1,6 +1,5 @@
 
-an die AI:
-jede Sektion ausfüllen, Anweisungen in runden Klammern beachten
+
 
 
 Welche Teile in welche Kapitel/Anhänge
@@ -46,4 +45,31 @@ Meine Anwendung ist eine Client-Server Installation, wobei der Server-Teil für 
 
 Auf dem Server kommt Python, Flask und MySQL zum Einsatz.
 
-Das Terminal verwendet Python 
+Das Terminal verwendet Python und das Framework Flask.
+
+
+
+
+## Dateien für Anhänge
+
+### Entwickler Doku
+INSTALL.md
+
+### Benutzer Doku
+README.md
+Steffi: ggf. die Bereiche für Admins kürzen?
+
+## Code Beispiele
+zeiterfassung.py — Hauptprogramm auf dem Terminal (Daemon/CLI). Liest RFID, schreibt events, synchronisiert zum Server
+
+zeitserver.py - Server, empgängt die Datensätze vom Terminal
+
+
+config/db_schema.py - DB Schema
+plus zwei Scripte für die Ausführung auf Terminal (SQlite) und Server (MySQL):
+dbmigration_client.py
+dbmigration_server.py
+
+Steffi: Start-Scripte und System Config, also für das Linux System, damit der Deamon autom beim Boot startet?
+systemd/zeiterfassung.service - Terminal
+systemd/zeitserver.service - Server
