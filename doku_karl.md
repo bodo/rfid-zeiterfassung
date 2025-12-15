@@ -32,8 +32,6 @@ RPLCD>=0.9
 RPi.GPIO>=0.7  # für bare-metal RPi; auf Nicht-RPi-Systemen ggf. weglassen
 gpiozero>=1.6  # optional, höherer Abstraktionslayer
 
-# RDM6300 / serielle Leser (optional)
-pyserial>=3.5
 
 # Hilfsbibliotheken
 python-dateutil>=2.8
