@@ -63,10 +63,14 @@ hier muss die Formatierung von Markdown nach Word gemacht werden. Evtl. macht Wo
 README.md
 Steffi: ggf. die Bereiche für Admins weg-kürzen?
 
+
 ## Code Beispiele
 zeiterfassung.py — Hauptprogramm Terminal: Liest RFID, schreibt events, sync zum Server
 
 zeitserver.py - Server, empfängt die Datensätze vom Terminal
+
+
+benutzeradmin.py - CLI Programm zum Verwalten der Mitarbeiter (HR-Abteilung)
 
 
 config/db_schema.py - DB Schema
@@ -75,10 +79,13 @@ plus zwei Scripte für die Ausführung auf Terminal (SQlite) und Server (MySQL):
 dbmigration_client.py - Script zum Anlegen der DB auf dem Terminal
 dbmigration_server.py - Script zum Anlegen der DB auf dem Server
 
+
+
 Steffi: Start-Scripte und System Config, also für das Linux System, damit der Deamon autom beim Boot startet?
 
 systemd/zeiterfassung.service - systemd Unit für das Terminal
 systemd/zeitserver.service - systemd Unit für den Flask-Server
+
 
 ## Unittest Codes
 Verzeichnis tests/
