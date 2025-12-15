@@ -1,0 +1,20 @@
+Flask>=2.0
+requests>=2.26
+mysql-connector-python>=8.0
+python-dotenv>=0.21.0
+
+# PN532 (Adafruit CircuitPython) - optional, für PN532 über I2C/SPI
+adafruit-circuitpython-pn532>=2.0.0
+
+# LCD 16x2 I2C (optional, z.B. RPLCD oder Adafruit-CharLCD)
+RPLCD>=0.9
+
+# Raspberry Pi GPIO libraries (optional on development machine)
+RPi.GPIO>=0.7  # für bare-metal RPi; auf Nicht-RPi-Systemen ggf. weglassen
+gpiozero>=1.6  # optional, höherer Abstraktionslayer
+
+# RDM6300 / serielle Leser (optional)
+pyserial>=3.5
+
+# Hilfsbibliotheken
+python-dateutil>=2.8

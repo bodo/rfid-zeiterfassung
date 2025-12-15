@@ -1,0 +1,9 @@
+requests>=2.26
+python-dateutil>=2.8
+
+# Hardware / Pi-spezifisch (nur auf dem Raspberry Pi installieren)
+RPi.GPIO>=0.7            # direktes GPIO (nur auf Pi)
+gpiozero>=1.6            # alternative GPIO-Abstraktion (optional)
+adafruit-circuitpython-pn532>=2.0.0  # PN532 (I2C/SPI) - optional
+RPLCD>=0.9               # LCD 16x2 I2C Unterstützung (optional)
+# pyserial entfernt; Projekt nutzt PN532 statt RDM6300. Bei Bedarf kann pyserial später wieder hinzugefügt werden.

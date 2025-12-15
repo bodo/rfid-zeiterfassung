@@ -1,0 +1,8 @@
+Flask>=2.0
+mysql-connector-python>=8.0
+python-dotenv>=0.21.0
+requests>=2.26
+gunicorn>=20.1.0
+
+# Optional / Monitoring
+#prometheus-client>=0.16.0

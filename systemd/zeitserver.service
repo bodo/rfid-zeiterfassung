@@ -1,0 +1,16 @@
+[Unit]
+Description=TJP Zeitserver
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/zeiterfassung/server
+User=pi
+ExecStart=/opt/zeiterfassung/server/.venv/bin/python3 /opt/zeiterfassung/server/zeitserver_launcher.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+# Optional: EnvironmentFile=/etc/tjp_env (z.B. TIME_SHARED_SECRET)
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+[Unit]
+Description=TJP Zeiterfassung Daemon
+After=network.target
+
+[Service]
+# Arbeitsverzeichnis des Projekts (Terminal-Komponente)
+WorkingDirectory=/opt/zeiterfassung/terminal
+User=pi
+ExecStart=/opt/zeiterfassung/terminal/.venv/bin/python3 /opt/zeiterfassung/terminal/zeiterfassung_launcher.py --real-reader
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+# Optional: Shared Secret über EnvironmentFile
+# EnvironmentFile=/etc/tjp_env
+
+[Install]
+WantedBy=multi-user.target
