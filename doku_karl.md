@@ -90,3 +90,7 @@ Verzeichnis tests/
 
 Vorschlag zum Übernehmen:
 tests/terminal/test_benutzeradmin.py
+
+
+## Screenshots
+screenshot-terminal.png - SSH Screenshot der Terminal mit Konsolen-Ausgaben
