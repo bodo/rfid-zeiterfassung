@@ -60,16 +60,24 @@ README.md
 Steffi: ggf. die Bereiche für Admins kürzen?
 
 ## Code Beispiele
-zeiterfassung.py — Hauptprogramm auf dem Terminal (Daemon/CLI). Liest RFID, schreibt events, synchronisiert zum Server
+zeiterfassung.py — Hauptprogramm Terminal: Liest RFID, schreibt events, sync zum Server
 
-zeitserver.py - Server, empgängt die Datensätze vom Terminal
+zeitserver.py - Server, empfängt die Datensätze vom Terminal
 
 
 config/db_schema.py - DB Schema
 plus zwei Scripte für die Ausführung auf Terminal (SQlite) und Server (MySQL):
-dbmigration_client.py
-dbmigration_server.py
+
+dbmigration_client.py - Script zum Anlegen der DB auf dem Terminal
+dbmigration_server.py - Script zum Anlegen der DB auf dem Server
 
 Steffi: Start-Scripte und System Config, also für das Linux System, damit der Deamon autom beim Boot startet?
-systemd/zeiterfassung.service - Terminal
-systemd/zeitserver.service - Server
+
+systemd/zeiterfassung.service - systemd Unit für das Terminal
+systemd/zeitserver.service - systemd Unit für den Flask-Server
+
+## Unittest Codes
+Verzeichnis tests/
+
+Vorschlag zum Übernehmen:
+tests/terminal/test_benutzeradmin.py
