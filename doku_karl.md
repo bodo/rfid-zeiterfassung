@@ -51,13 +51,17 @@ Das Terminal verwendet Python und das Framework Flask.
 
 
 ## Dateien für Anhänge
+ein paar Vorschläge im Format:
+<Dateiname> - <Bildunterschrift>
 
 ### Entwickler Doku
 INSTALL.md
 
+hier muss die Formatierung von Markdown nach Word gemacht werden. Evtl. macht Word das auch autom bei Copy & Paste
+
 ### Benutzer Doku
 README.md
-Steffi: ggf. die Bereiche für Admins kürzen?
+Steffi: ggf. die Bereiche für Admins weg-kürzen?
 
 ## Code Beispiele
 zeiterfassung.py — Hauptprogramm Terminal: Liest RFID, schreibt events, sync zum Server
