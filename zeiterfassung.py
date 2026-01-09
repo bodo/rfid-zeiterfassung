@@ -146,13 +146,12 @@ def main_loop(simulate_input=True):
     conn = connect_db()
     print("Zeiterfassung gestartet. 'q' zum Beenden.")
     lcd = None
-    try:
-        if LCDDisplay is not None:
-            try:
-                lcd = LCDDisplay()
-                lcd.show_ready()
-            except Exception as e:
-                logging.warning("LCD initialisierung fehlgeschlagen: %s", e)
+    if LCDDisplay is not None:
+        try:
+            lcd = LCDDisplay()
+            lcd.show_ready()
+        except Exception as e:
+            logging.warning("LCD initialisierung fehlgeschlagen: %s", e)
     try:
         while True:
             if simulate_input:
