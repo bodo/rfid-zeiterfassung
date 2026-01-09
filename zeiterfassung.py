@@ -19,6 +19,10 @@ except Exception:
 
 from config.db_schema import CLIENT_SCHEMA, init_db as init_db_file
 from config.pin_config import PN532_SPI_CS, PN532_RSTO, PN532_IRQ, LED_COMMON_ANODE
+try:
+    from hw.lcd_i2c import LCDDisplay
+except Exception:
+    LCDDisplay = None
 
 DB_PATH = Path(__file__).parent / "data" / "zeiterfassung.db"
 DB_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -141,6 +145,14 @@ def has_start_work_today(conn, employee_id):
 def main_loop(simulate_input=True):
     conn = connect_db()
     print("Zeiterfassung gestartet. 'q' zum Beenden.")
+    lcd = None
+    try:
+        if LCDDisplay is not None:
+            try:
+                lcd = LCDDisplay()
+                lcd.show_ready()
+            except Exception as e:
+                logging.warning("LCD initialisierung fehlgeschlagen: %s", e)
     try:
         while True:
             if simulate_input:
@@ -155,6 +167,11 @@ def main_loop(simulate_input=True):
                     log(conn, "error", f"Unknown RFID {uid}")
                     # konsistente Konsolenmeldung für unbekannten Tag
                     logging.error(f"{datetime.now().strftime('%H:%M')} Unbekannter RFID \"{uid}\" - bitte Admin-Tag registrieren")
+                    try:
+                        if lcd:
+                            lcd.show_unknown()
+                    except Exception:
+                        pass
                     continue
                 emp_id = emp[0]
                 # Vermeide doppelte Einbuchungen (work) am selben Tag
@@ -166,6 +183,11 @@ def main_loop(simulate_input=True):
                 # High-level Konsolen-Log gemäß Spec
                 console_log_employee(emp[1], uid, ev)
                 log(conn, "event", f"Inserted {ev} for emp {emp_id} (event id {eid})")
+                try:
+                    if lcd:
+                        lcd.show_success(emp[1])
+                except Exception:
+                    pass
             else:
                 # Echte Reader-Schleife mit PN532 (SPI)
                 try:
@@ -189,6 +211,11 @@ def main_loop(simulate_input=True):
                         if not emp:
                             logging.error(f"{datetime.now().strftime('%H:%M')} Unbekannter RFID \"{uid}\" - bitte Admin-Tag registrieren")
                             log(conn, "error", f"Unknown RFID {uid}")
+                            try:
+                                if lcd:
+                                    lcd.show_unknown()
+                            except Exception:
+                                pass
                             continue
                         emp_id = emp[0]
                         # Default-Verhalten: bei erstem Tag/Tag des Tages => work, sonst (falls duplicate) ignorieren
@@ -201,6 +228,11 @@ def main_loop(simulate_input=True):
                         console_log_employee(emp[1], uid, ev)
                         log(conn, "event", f"Inserted {ev} for emp {emp_id} (event id {eid})")
                         # kleine Pause, damit Karte nicht mehrfach gelesen wird
+                        try:
+                            if lcd:
+                                lcd.show_success(emp[1])
+                        except Exception:
+                            pass
                         time.sleep(1.0)
                     except KeyboardInterrupt:
                         raise

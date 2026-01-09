@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <style>
+    .box { fill:#f8f9fa; stroke:#333; stroke-width:2 }
+    .small { font: 14px/1.2 "Arial"; fill:#111 }
+    .title { font: 18px/1.2 "Arial"; fill:#111; font-weight:700 }
+    .wire { stroke:#222; stroke-width:3; fill:none }
+    .note { font:12px/1.2 "Arial"; fill:#333 }
+  </style>
+
+  <!-- Title -->
+  <text x="20" y="30" class="title">Schaltplan (vereinfachte Blockdarstellung)</text>
+  <text x="20" y="50" class="note">Hinweis: Barrel jack außen = GND, innen = +Vin (6-12 V). Step-Down auf 5V einstellen.</text>
+
+  <!-- External PSU / Barrel -->
+  <g>
+    <rect x="40" y="90" width="180" height="60" class="box" rx="6"/>
+    <text x="130" y="125" text-anchor="middle" class="small">Externes Netzteil 6-12V</text>
+    <circle cx="130" cy="170" r="6" fill="#333" />
+    <text x="150" y="175" class="small">Barrel jack (Außen=GND, Innen=+Vin)</text>
+  </g>
+
+  <!-- Step-down -->
+  <g>
+    <rect x="260" y="120" width="220" height="80" class="box" rx="6"/>
+    <text x="370" y="160" text-anchor="middle" class="small">Step-Down</text>
+    <text x="370" y="178" text-anchor="middle" class="small">(6-12V -> 5V)</text>
+  </g>
+
+  <!-- Wires from barrel to step-down -->
+  <path d="M 130 170 L 260 160" class="wire" />
+  <text x="200" y="150" class="note">+Vin</text>
+
+  <!-- 5V Rail box -->
+  <g>
+    <rect x="520" y="60" width="600" height="220" class="box" rx="8"/>
+    <text x="820" y="80" text-anchor="middle" class="small">5V Schiene / Perfboard</text>
+  </g>
+
+  <!-- Wire from step-down to 5V rail -->
+  <path d="M 480 160 L 520 160" class="wire" />
+  <text x="500" y="148" class="note">5V</text>
+  <path d="M 395 160 L 395 300" class="wire" />
+  <path d="M 395 300 L 520 300" class="wire" />
+  <text x="420" y="310" class="note">GND</text>
+
+  <!-- Raspberry Pi block -->
+  <g>
+    <rect x="560" y="120" width="220" height="120" class="box" rx="6"/>
+    <text x="670" y="145" text-anchor="middle" class="small">Raspberry Pi</text>
+    <text x="670" y="165" text-anchor="middle" class="note">5V -> phys. Pin 2/4</text>
+    <text x="670" y="185" text-anchor="middle" class="note">GND -> GND Rail</text>
+  </g>
+
+  <!-- LCD block -->
+  <g>
+    <rect x="820" y="220" width="240" height="80" class="box" rx="6"/>
+    <text x="940" y="245" text-anchor="middle" class="small">LCD 16x2 (I2C)</text>
+    <text x="940" y="265" text-anchor="middle" class="note">VCC,GND,SDA,SCL</text>
+  </g>
+
+  <!-- PN532 block -->
+  <g>
+    <rect x="560" y="260" width="220" height="100" class="box" rx="6"/>
+    <text x="670" y="285" text-anchor="middle" class="small">PN532 (SPI)</text>
+    <text x="670" y="305" text-anchor="middle" class="note">MOSI/MISO/SCLK/CS/RST/IRQ</text>
+  </g>
+
+  <!-- Wires: Pi to LCD (I2C) -->
+  <path d="M 780 160 L 820 260" class="wire" />
+  <path d="M 780 200 L 820 260" class="wire" />
+  <text x="780" y="200" class="note">SDA/SCL</text>
+
+  <!-- Wires: Pi to PN532 (SPI) -->
+  <path d="M 660 200 L 660 260" class="wire" />
+  <text x="640" y="230" class="note">SPI: MOSI/MISO/SCLK/CS</text>
+
+  <!-- LEDs & Buttons area -->
+  <g>
+    <rect x="820" y="320" width="240" height="120" class="box" rx="6"/>
+    <text x="940" y="345" text-anchor="middle" class="small">LEDs & Taster</text>
+    <text x="940" y="365" text-anchor="middle" class="note">GPIO -> Widerstand -> LED -> GND</text>
+  </g>
+
+  <!-- Ground and notes -->
+  <text x="40" y="760" class="note">Wichtig: Gemeinsame Masse (GND) verbinden; Module mit 3.3V nur an Pi 3.3V Pin anschließen.</text>
+
+  <!-- Footer -->
+  <text x="20" y="780" class="note">Datei: specs/04_schematic.svg — Konvertiere mit: inkscape specs/04_schematic.svg --export-type=png --export-filename=specs/04_schematic.png</text>
+</svg>
