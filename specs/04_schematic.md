@@ -50,18 +50,18 @@ Verdrahtungstabelle (Kurzreferenz)
 - I2C LCD:
   - VCC ← 5V‑Schiene (oder 3.3 V falls nötig)
   - GND ← GND‑Schiene
-  - SDA ← BCM2 (Pi SDA)
-  - SCL ← BCM3 (Pi SCL)
+  - SDA ← BCM2 (Pi SDA, physical pin 3)
+  - SCL ← BCM3 (Pi SCL, physical pin 5)
 - PN532 (SPI):
   - VCC ← 5V‑Schiene (oder 3.3 V nach Datenblatt)
   - GND ← GND‑Schiene
-  - MOSI ← BCM10
-  - MISO ← BCM9
-  - SCLK ← BCM11
-  - CS   ← BCM8
-  - RSTO ← BCM24 (Output vom Pi)
-  - IRQ  ← BCM25 (Input zum Pi)
-- LEDs (je): GPIO (z. B. BCM17) → Serie 330 Ω → LED Anode; Kathode → GND
+  - MOSI ← BCM10 (physical pin 19)
+  - MISO ← BCM9  (physical pin 21)
+  - SCLK ← BCM11 (physical pin 23)
+  - CS   ← BCM8  (physical pin 24)
+  - RSTO ← BCM24 (Output vom Pi, physical pin 18)
+  - IRQ  ← BCM25 (Input zum Pi, physical pin 22)
+ - LEDs (je): GPIO (z. B. BCM17, physical pin 11) → Serie 330 Ω → LED Anode; Kathode → GND
 - Taster (je): Taster zwischen GPIO und GND; in Software PullUp aktivieren
 
 Konnektoren empfohlen:

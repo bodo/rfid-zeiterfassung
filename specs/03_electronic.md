@@ -18,22 +18,22 @@ Hinweis zur Nummerierung: In der Software werden GPIOs mit BCM‑Nummern verwend
 - Schraubklemmen (2‑polig) für 5 V / GND Eingang (optional)
 
 ## Relevante GPIO‑Zuordnung (aus `config/pin_config.py`)
-- `LED_READY_GREEN` = BCM17
-- `LED_READY_RED`   = BCM27
-- `LED_KOMMEN`      = BCM22
-- `LED_GEHEN`       = BCM23
-- `BTN_INFO`        = BCM5
-- `BTN_KOMMEN`      = BCM6
-- `BTN_GEHEN`       = BCM13
-- `BTN_EXT_TERM`    = BCM19
-- `I2C_SDA`         = BCM2  (SDA)
-- `I2C_SCL`         = BCM3  (SCL)
-- `PN532_SPI_MOSI`  = BCM10
-- `PN532_SPI_MISO`  = BCM9
-- `PN532_SPI_SCLK`  = BCM11
-- `PN532_SPI_CS`    = BCM8
-- `PN532_RSTO`      = BCM24
-- `PN532_IRQ`       = BCM25
+- `LED_READY_GREEN` = BCM17 (physical pin 11)
+- `LED_READY_RED`   = BCM27 (physical pin 13)
+- `LED_KOMMEN`      = BCM22 (physical pin 15)
+- `LED_GEHEN`       = BCM23 (physical pin 16)
+- `BTN_INFO`        = BCM5  (physical pin 29)
+- `BTN_KOMMEN`      = BCM6  (physical pin 31)
+- `BTN_GEHEN`       = BCM13 (physical pin 33)
+- `BTN_EXT_TERM`    = BCM19 (physical pin 35)
+- `I2C_SDA`         = BCM2  (physical pin 3, SDA)
+- `I2C_SCL`         = BCM3  (physical pin 5, SCL)
+- `PN532_SPI_MOSI`  = BCM10 (physical pin 19)
+- `PN532_SPI_MISO`  = BCM9  (physical pin 21)
+- `PN532_SPI_SCLK`  = BCM11 (physical pin 23)
+- `PN532_SPI_CS`    = BCM8  (physical pin 24)
+- `PN532_RSTO`      = BCM24 (physical pin 18)
+- `PN532_IRQ`       = BCM25 (physical pin 22)
 
 ### Raspberry Pi 3 Unterstützung
 - Die Verdrahtung und das Layout unterstützen alternativ einen Raspberry Pi 3 (Model B/B+). In den meisten Fällen sind die Montagebohrungen und der 40‑Pin Header kompatibel mit Pi 4, prüfe aber die Abstände vor dem finalen Gehäusedruck.

@@ -207,31 +207,31 @@ Hinweis: Alle GPIO‑Nummern unten sind im BCM‑Layout angegeben. Vor dem Löte
 - PN532 (empfohlen: SPI, damit I2C für LCD frei bleibt)
   - VCC -> 3.3V
   - GND -> GND
-  - MOSI -> GPIO10 (BCM 10, SPI0 MOSI)
-  - MISO -> GPIO9  (BCM 9, SPI0 MISO)
-  - SCLK -> GPIO11 (BCM 11, SPI0 SCLK)
-  - SS/CE -> GPIO8 (BCM 8, SPI0 CE0)
-  - RSTO (optional) -> GPIO24 (BCM 24)
-  - IRQ (optional) -> GPIO25 (BCM 25)
+  - MOSI -> GPIO10 (BCM 10, physical pin 19, SPI0 MOSI)
+  - MISO -> GPIO9  (BCM 9, physical pin 21, SPI0 MISO)
+  - SCLK -> GPIO11 (BCM 11, physical pin 23, SPI0 SCLK)
+  - SS/CE -> GPIO8 (BCM 8, physical pin 24, SPI0 CE0)
+  - RSTO (optional) -> GPIO24 (BCM 24, physical pin 18)
+  - IRQ (optional) -> GPIO25 (BCM 25, physical pin 22)
 
 - LCD 16x2 mit I2C‑Adapter
-  - SDA -> GPIO2 (BCM 2, SDA1)
-  - SCL -> GPIO3 (BCM 3, SCL1)
+  - SDA -> GPIO2 (BCM 2, physical pin 3, SDA1)
+  - SCL -> GPIO3 (BCM 3, physical pin 5, SCL1)
   - I2C‑Adresse: meist 0x27 (prüfen)
 
 - LEDs (mit Vorwiderständen 220–330 Ω)
   - "Bereit" (Dual‑Color)
-    - GRÜN -> GPIO17 (BCM 17)
-    - ROT   -> GPIO27 (BCM 27)
+    - GRÜN -> GPIO17 (BCM 17, physical pin 11)
+    - ROT   -> GPIO27 (BCM 27, physical pin 13)
     - Hinweis: bei common‑anode invertierte Logik beachten
-  - "Kommen" (grün) -> GPIO22 (BCM 22)
-  - "Gehen"   (rot) -> GPIO23 (BCM 23)
+  - "Kommen" (grün) -> GPIO22 (BCM 22, physical pin 15)
+  - "Gehen"   (rot) -> GPIO23 (BCM 23, physical pin 16)
 
 - Taster (Taster gegen 3.3V, interne Pull‑Down empfohlen, entprellen softwareseitig)
-  - INFO       -> GPIO5  (BCM 5)
-  - KOMMEN     -> GPIO6  (BCM 6)
-  - GEHEN      -> GPIO13 (BCM 13)
-  - EXT_TERMIN -> GPIO19 (BCM 19)
+  - INFO       -> GPIO5  (BCM 5, physical pin 29)
+  - KOMMEN     -> GPIO6  (BCM 6, physical pin 31)
+  - GEHEN      -> GPIO13 (BCM 13, physical pin 33)
+  - EXT_TERMIN -> GPIO19 (BCM 19, physical pin 35)
 
 - Hinweise / Schutz
   - LED‑Vorwiderstände: 220–330 Ω
