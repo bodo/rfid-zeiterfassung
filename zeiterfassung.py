@@ -7,18 +7,13 @@ import time
 import argparse
 import logging
 try:
-    import board                 # Adafruit Blinka / CircuitPython board pins
-    import busio
-    import digitalio
-    from adafruit_pn532.spi import PN532_SPI
+    # RC522 reader wrapper (uses `mfrc522` low-level API)
+    from hw.rc522_reader import RC522Reader
 except Exception:
-    board = None
-    busio = None
-    digitalio = None
-    PN532_SPI = None
+    RC522Reader = None
 
 from config.db_schema import CLIENT_SCHEMA, init_db as init_db_file
-from config.pin_config import PN532_SPI_CS, PN532_RSTO, PN532_IRQ, LED_COMMON_ANODE
+from config.pin_config import LED_COMMON_ANODE
 try:
     from hw.lcd_i2c import LCDDisplay
 except Exception:
@@ -81,46 +76,7 @@ def console_log_employee(emp_name: str, uid: str, event_type: str, when=None):
     label = EVENT_LABELS.get(event_type, event_type)
     logging.info(f"{time_str} Mitarbeiter \"{emp_name}\" (\"{uid}\") {label}")
 
-class PN532Reader:
-    """
-    Einfacher PN532 SPI Reader-Wrapper.
-    Benutzt adafruit_pn532.spi.PN532_SPI.
-    read_uid(timeout) -> HEX string (z.B. "04AABBCCDD")
-    """
-    def __init__(self, cs_pin: int = PN532_SPI_CS, rst_pin: int = None, irq_pin: int = None):
-        if PN532_SPI is None or board is None or busio is None or digitalio is None:
-            raise RuntimeError("Adafruit PN532 libs nicht installiert oder Blinka nicht verfügbar")
-        # Board pin name versuchen (z.B. D8 für BCM8)
-        try:
-            spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
-        except Exception as e:
-            raise RuntimeError("SPI Init fehlgeschlagen: " + str(e))
-        # CS Pin auf board.<D{n}> abbilden
-        cs_attr = f"D{cs_pin}"
-        try:
-            cs = digitalio.DigitalInOut(getattr(board, cs_attr))
-        except Exception:
-            # Fallback: CE0/CE1 Standard pins (D8 für CE0)
-            cs = digitalio.DigitalInOut(board.D8)
-        try:
-            self.pn532 = PN532_SPI(spi, cs)
-            # Initialisierung
-            self.pn532.SAM_configuration()
-        except Exception as e:
-            raise RuntimeError("PN532 Init fehlgeschlagen: " + str(e))
-
-    def read_uid(self, timeout: float = 0.5):
-        """
-        Liest passives Ziel (Card) und gibt HEX-String zurück oder None bei Timeout.
-        """
-        try:
-            uid = self.pn532.read_passive_target(timeout=timeout)
-        except Exception:
-            uid = None
-        if not uid:
-            return None
-        # NTAG UID als HEX (groß) darstellen
-        return "".join(f"{b:02X}" for b in uid)
+# RC522Reader provided in hw/rc522_reader.py; if unavailable, real-reader mode will fail with helpful message
 
 def has_start_work_today(conn, employee_id):
     """
@@ -190,10 +146,12 @@ def main_loop(simulate_input=True):
             else:
                 # Echte Reader-Schleife mit PN532 (SPI)
                 try:
-                    reader = PN532Reader()
-                    logging.info("PN532-Reader initialisiert, Warte auf Tags...")
+                    if RC522Reader is None:
+                        raise RuntimeError("RC522Reader implementation not available (mfrc522 missing)")
+                    reader = RC522Reader()
+                    logging.info("RC522-Reader initialisiert, Warte auf Tags...")
                 except Exception as exc:
-                    logging.error("PN532-Reader konnte nicht initialisiert werden: %s", exc)
+                    logging.error("RC522-Reader konnte nicht initialisiert werden: %s", exc)
                     time.sleep(5)
                     break
                 # Endlosschleife: bei Tag lesen verarbeiten (nicht blockierend)
