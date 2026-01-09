@@ -258,6 +258,15 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
+
+## Zugriff auf SPI/GPIO ohne sudo
+Wenn Du die virtuelle Umgebung als Nicht‑Root‑Nutzer verwendest, benötigt dieser Nutzer Zugriff auf die Geräte `/dev/spidev*` und GPIO. Füge den Nutzer zur Gruppe `spi` und `gpio` hinzu:
+```sh
+sudo usermod -aG spi,gpio $USER
+# Danach neu einloggen oder neu starten, damit die Gruppenmitgliedschaft wirksam wird
+reboot
+```
+Alternativ kannst Du das Testskript mit der venv‑Python direkt unter `sudo` starten, z.B.: `sudo /opt/zeiterfassung/terminal/.venv/bin/python3 terminal/test_rc522.py`, aber die Gruppenlösung ist sicherer und empfohlen.
 ```
 Starten (zum Testen / Entwicklung):
 ```sh

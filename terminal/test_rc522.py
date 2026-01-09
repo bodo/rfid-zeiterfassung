@@ -12,7 +12,18 @@ try:
     from mfrc522 import SimpleMFRC522
 except Exception as e:
     print("Fehler: mfrc522 Bibliothek nicht gefunden:", e)
-    print("Installieren: pip install mfrc522 spidev RPi.GPIO (nur auf Raspberry Pi)")
+    print("Mögliche Lösungen (auf dem Raspberry Pi):")
+    print(" 1) Systempakete installieren:")
+    print("    sudo apt update && sudo apt install -y python3-pip python3-dev build-essential python3-rpi.gpio python3-spidev")
+    print(" 2) Python‑Paket installieren:")
+    print("    sudo pip3 install mfrc522")
+    print(" 3) SPI aktivieren (raspi-config):")
+    print("    sudo raspi-config -> Interface Options -> SPI -> Enable, dann Reboot")
+    print(" 4) Nutzer zur Gruppe hinzufügen (Zugriff auf /dev/spidev*):")
+    print("    sudo usermod -aG spi,gpio $USER && reboot")
+    print(" 5) Prüfen, ob das Gerät vorhanden ist:")
+    print("    ls -l /dev/spidev*")
+    print("Danach: Skript mit sudo ausführen, falls Zugriffsfehler bestehen:\n    sudo python3 terminal/test_rc522.py")
     raise SystemExit(1)
 
 
@@ -27,7 +38,27 @@ def main():
                 # optional: kurze Pause
                 time.sleep(1)
             except Exception as ex:
-                print("Lesefehler:", ex)
+                msg = str(ex)
+                print("Lesefehler:", msg)
+                # Häufig: MIFARE Classic benötigt Auth zum Lesen von Datenblöcken.
+                # Versuche als Fallback nur die UID per low-level API zu lesen.
+                if "AUTH ERROR" in msg or "status2req & 0x08" in msg or "Authentication" in msg:
+                    try:
+                        from mfrc522 import MFRC522
+                        dev = MFRC522()
+                        status, TagType = dev.MFRC522_Request(dev.PICC_REQIDL)
+                        if status == dev.MI_OK:
+                            status, uid = dev.MFRC522_Anticoll()
+                            if status == dev.MI_OK and uid:
+                                uid_hex = ''.join(f"{b:02X}" for b in uid)
+                                uid_dec = int(uid_hex, 16)
+                                print(f"Fallback UID: {uid_dec} (HEX: {uid_hex})")
+                            else:
+                                print("Fallback: UID konnte nicht gelesen werden.")
+                        else:
+                            print("Fallback: Kein Tag im Lesebereich (low-level).")
+                    except Exception as e2:
+                        print("Fallback Low-level Lesefehler:", e2)
                 time.sleep(0.5)
     except KeyboardInterrupt:
         print('\nBeende Test.')

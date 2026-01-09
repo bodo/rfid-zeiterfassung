@@ -3,8 +3,7 @@ requests>=2.26
 mysql-connector-python>=8.0
 python-dotenv>=0.21.0
 
-# PN532 (Adafruit CircuitPython) - optional, für PN532 über I2C/SPI
-adafruit-circuitpython-pn532>=2.0.0
+# Hinweis: RC522 (MFRC522) wird jetzt bevorzugt; PN532 support entfernt.
 
 # LCD 16x2 I2C (optional, z.B. RPLCD oder Adafruit-CharLCD)
 RPLCD>=0.9
