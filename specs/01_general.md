@@ -216,6 +216,7 @@ Hinweis: Alle angegebenen GPIO-Nummern sind im BCM-Layout.
     - Hinweis: Wenn Dual-Color als common-anode ausgeführt ist, invertierte Logik verwenden (siehe config)
   - "Kommen" (grün) -> GPIO22 (BCM 22, physical pin 15)
   - "Gehen"   (rot) -> GPIO23 (BCM 23, physical pin 16)
+   - "Extern Termin" (gelb) -> GPIO26 (BCM 26, physical pin 37)
 
 - Taster (mit internen Pull-Down, Taster gegen 3.3V schalten)
   - INFO       -> GPIO5  (BCM 5, physical pin 29)

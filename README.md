@@ -6,6 +6,7 @@ Dieses Projekt implementiert ein Raspberry Pi Terminal zur Arbeitszeiterfassung 
 - Terminal einschalten: Dual-Color LED "Bereit" leuchtet grün.
 - RFID präsentieren: UID vor den Leser halten.
   - Bei erfolgreichem Erkennen: "Bereit" blinkt grün (3x) und "Kommen"/"Gehen" LED zeigt jeweilige Aktion.
+  - Bei erfolgreichem Erkennen: "Bereit" blinkt grün (3x) und "Kommen"/"Gehen" LED zeigt jeweilige Aktion. Bei externen Terminen leuchtet die gelbe "Extern"-LED kurz.
   - Bei unbekanntem Tag: "Bereit" blinkt rot (3x).
 - Tasten:
   - Info: Kurzinformation auf LCD (optional).
@@ -64,6 +65,8 @@ Diese Meldungen erleichtern das Monitoring per `journalctl` oder in der Konsole.
 
 ## Dateien Überblick
 - zeiterfassung.py — Hauptprogramm (Daemon/CLI). Liest RFID, schreibt events.
+ - hw/leds.py — LED abstractions (GPIO fallback and `LED_EXTERN` support)
+ - zeiterfassung.py — Hauptprogramm (Daemon/CLI). Liest RFID, schreibt events.
 - benutzeradmin.py — CLI zur Verwaltung von employees.
 - reports.py — CLI für Reports.
 - dbmigration_client.py / dbmigration_server.py — DB initialisieren.
@@ -94,3 +97,42 @@ Kopiere das Repo nach /opt/zeiterfassung, dann installiere die Abhängigkeiten p
   python3 -m venv .venv && source .venv/bin/activate
   pip install -r requirements.txt
   python3 zeitserver_launcher.py
+
+### Schnellinstallation (one-liner)
+Du kannst das Projekt direkt vom Internet installieren oder aktualisieren. Beispiel-One-Liner (RAW-URL):
+
+```bash
+curl -sL https://raw.githubusercontent.com/bodo/rfid-zeiterfassung/main/install.sh | bash -s -- https://github.com/bodo/rfid-zeiterfassung.git
+```
+
+Der Befehl lädt `Installer.sh` vom Repo und führt das Skript aus. Standardmäßig klont bzw. updated das Skript das Repo, erstellt virtuelle Umgebungen für `terminal` und `server` (falls ausgewählt) und installiert die jeweiligen `requirements.txt`.
+
+Siehe auch das Installationsskript: [install.sh](install.sh)
+
+### Installationsskripte
+
+- **`install.sh` — Installer (Einzelskript)**: Dieses Skript ist das zentrale Installationswerkzeug. Es kann per One‑liner vom Raw‑GitHub ausgeführt werden (siehe oben). Verhalten:
+  - Klont das Repo (oder führt `git pull` aus, wenn bereits vorhanden).
+  - Fragt interaktiv, welche Komponente(n) installiert werden sollen: `terminal`, `server` oder `beides`.
+  - Legt pro Komponente eine virtuelle Umgebung `.venv` an und installiert `requirements.txt`, falls vorhanden.
+  - Bietet an, Beispiel‑`systemd`‑Units nach `/etc/systemd/system/` zu kopieren (erfordert sudo).
+
+- **`updater.sh` — Update-Helper**: Dieses Skript aktualisiert lokal vorhandene Klone des Projekts per `git pull --rebase` und wurde so gebaut, dass es sich selbst zuerst aktualisieren kann. Verhalten und Beispiele:
+  - Beim Start prüft `updater.sh` die Remote‑Version (`raw.githubusercontent.com`) und ersetzt sich selbst, falls eine neuere Version vorhanden ist; danach sollte das Skript neu gestartet werden.
+  - Falls keine Selbstaktualisierung nötig ist, sucht das Skript in typischen Pfaden (`$PWD`, `$HOME/zeiterfassung`, `/opt/zeiterfassung`) nach Git‑Repos und führt `git pull --rebase` aus.
+  - Flags:
+    - `--dry-run`: Zeigt die Aktionen an, führt aber keine Schreibaktionen aus.
+    - `--no-self-update`: Überspringt die Selbstaktualisierung und führt direkt Repo‑Updates aus.
+
+Beispiele:
+
+```bash
+# Self‑update prüfen und dann Repos updaten
+./updater.sh
+
+# Dry‑run (keine Änderungen)
+bash updater.sh --dry-run
+
+# Self‑update überspringen
+./updater.sh --no-self-update
+```

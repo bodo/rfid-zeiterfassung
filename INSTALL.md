@@ -14,6 +14,40 @@ cd /opt
 sudo git clone <repo-url> zeiterfassung
 cd zeiterfassung
 
+## Skripte: `install.sh` und `updater.sh`
+Zur Erleichterung von Installation und Updates enthält das Projekt zwei Hilfsskripte:
+
+- `install.sh` — Ein einzelnes, interaktives Installer‑Skript. Funktionen:
+  - Klont das Repo (oder macht `git pull`, falls bereits geklont).
+  - Fragt, ob `terminal`, `server` oder `beides` installiert werden soll.
+  - Legt pro Komponente eine `.venv` an und installiert `requirements.txt`.
+  - Optionales Kopieren der `systemd/` Unit‑Files (erfordert sudo).
+
+  Beispiel (One‑liner, ausführbar via curl):
+  ```bash
+  curl -sL https://raw.githubusercontent.com/bodo/rfid-zeiterfassung/main/install.sh | bash -s -- https://github.com/bodo/rfid-zeiterfassung.git
+  ```
+
+- `updater.sh` — Update‑Helper. Funktionen:
+  - Prüft zunächst, ob es eine neuere Version von `updater.sh` auf `raw.githubusercontent.com` gibt; falls ja, aktualisiert es sich selbst (legt Backup an) und fordert zur erneuten Ausführung auf.
+  - Sucht lokal in typischen Pfaden (`$PWD`, `$HOME/zeiterfassung`, `/opt/zeiterfassung`) nach geklonten Repos und führt `git pull --rebase` aus.
+  - Flags:
+    - `--dry-run` — keine Änderungen, nur Anzeigen der Aktionen.
+    - `--no-self-update` — überspringt die Selbstaktualisierung und führt direkt die Repo‑Updates aus.
+
+  Beispiele:
+  ```bash
+  # Self‑update prüfen + Repo‑Updates
+  ./updater.sh
+
+  # Dry‑run
+  bash updater.sh --dry-run
+
+  # Self‑update überspringen
+  ./updater.sh --no-self-update
+  ```
+
+
 ## 3. Virtuelle Umgebung und Abhängigkeiten
 python3 -m venv .venv
 source .venv/bin/activate
@@ -226,6 +260,7 @@ Hinweis: Alle GPIO‑Nummern unten sind im BCM‑Layout angegeben. Vor dem Löte
     - Hinweis: bei common‑anode invertierte Logik beachten
   - "Kommen" (grün) -> GPIO22 (BCM 22, physical pin 15)
   - "Gehen"   (rot) -> GPIO23 (BCM 23, physical pin 16)
+  - "Extern Termin" (gelb) -> GPIO26 (BCM 26, physical pin 37)
 
 - Taster (Taster gegen 3.3V, interne Pull‑Down empfohlen, entprellen softwareseitig)
   - INFO       -> GPIO5  (BCM 5, physical pin 29)

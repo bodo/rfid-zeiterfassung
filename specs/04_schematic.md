@@ -62,6 +62,8 @@ Verdrahtungstabelle (Kurzreferenz)
   - RSTO ← BCM24 (Output vom Pi, physical pin 18)
   - IRQ  ← BCM25 (Input zum Pi, physical pin 22)
  - LEDs (je): GPIO (z. B. BCM17, physical pin 11) → Serie 330 Ω → LED Anode; Kathode → GND
+ - LEDs (je): GPIO (z. B. BCM17, physical pin 11) → Serie 330 Ω → LED Anode; Kathode → GND
+ - Externe Termine: Gelbe LED -> BCM26 (physical pin 37)
 - Taster (je): Taster zwischen GPIO und GND; in Software PullUp aktivieren
 
 Konnektoren empfohlen:

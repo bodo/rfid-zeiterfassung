@@ -18,6 +18,10 @@ try:
     from hw.lcd_i2c import LCDDisplay
 except Exception:
     LCDDisplay = None
+try:
+    from hw.leds import LEDController
+except Exception:
+    LEDController = None
 
 DB_PATH = Path(__file__).parent / "data" / "zeiterfassung.db"
 DB_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -102,12 +106,18 @@ def main_loop(simulate_input=True):
     conn = connect_db()
     print("Zeiterfassung gestartet. 'q' zum Beenden.")
     lcd = None
+    leds = None
     if LCDDisplay is not None:
         try:
             lcd = LCDDisplay()
             lcd.show_ready()
         except Exception as e:
             logging.warning("LCD initialisierung fehlgeschlagen: %s", e)
+    if LEDController is not None:
+        try:
+            leds = LEDController()
+        except Exception:
+            leds = None
     try:
         while True:
             if simulate_input:
@@ -141,6 +151,13 @@ def main_loop(simulate_input=True):
                 try:
                     if lcd:
                         lcd.show_success(emp[1])
+                    if leds:
+                        if ev == 'work':
+                            leds.flash('kommen')
+                        elif ev == 'break':
+                            leds.flash('break')
+                        elif ev == 'ext':
+                            leds.flash('ext')
                 except Exception:
                     pass
             else:
@@ -188,6 +205,13 @@ def main_loop(simulate_input=True):
                         try:
                             if lcd:
                                 lcd.show_success(emp[1])
+                            if leds:
+                                if ev == 'work':
+                                    leds.flash('kommen')
+                                elif ev == 'break':
+                                    leds.flash('break')
+                                elif ev == 'ext':
+                                    leds.flash('ext')
                         except Exception:
                             pass
                         time.sleep(1.0)
