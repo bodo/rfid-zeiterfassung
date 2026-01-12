@@ -36,6 +36,8 @@ Hinweis zur Nummerierung: In der Software werden GPIOs mit BCM‑Nummern verwend
 - `PN532_RSTO`      = BCM24 (physical pin 18)
 - `PN532_IRQ`       = BCM25 (physical pin 22)
 
+- `SHUTDOWN_BTN`   = BCM4  (physical pin 7)   # Taster: Sauberer Shutdown (gegen GND, langer Druck)
+
  - `LED_READY_GREEN` = BCM17 (physical pin 11)  # Status: Gerät bereit (grün)
  - `LED_READY_RED`   = BCM27 (physical pin 13)  # Status: Fehler/Alarm (rot)
  - `LED_KOMMEN`      = BCM22 (physical pin 15)  # Aktion: Kommen (kurzes Blink/Anzeigen)
@@ -93,6 +95,11 @@ Hinweis: Viele Breakout‑Module für PN532 oder LCD können 3.3 V oder 5 V ben�
 3. PN532 (SPI): Verbinde MOSI → BCM10, MISO → BCM9, SCLK → BCM11, CS → BCM8, RSTO → BCM24 (Output vom Pi), IRQ → BCM25 (Input zum Pi). VCC → 3.3 V oder 5 V je nach Breakout (prüfen!) und GND → GND.
 4. LEDs: Jede LED über 330 Ω Serie an den jeweiligen GPIO; andere Seite der LED an GND (bei `LED_COMMON_ANODE = False`). Beispiel: GPIO (BCM17) → 330 Ω → Anode LED → Kathode → GND.
 5. Taster: Taster zwischen GPIO und GND, Software‑PullUp aktivieren (oder externe 10 kΩ PullUp an 3.3 V). Alternativ Taster zwischen 3.3 V und GPIO mit PullDown. Standard: Taster gegen GND + interne PullUp.
+
+Shutdown‑Taster (empfohlen):
+- Verkabelung: Ein Taster zwischen `SHUTDOWN_BTN` (BCM4, physical pin 7) und GND.
+- Software: In `zeiterfassung.py` wird der Taster mit internem PullUp konfiguriert. Ein langes Drücken (≥2 s) löst einen sauberen `sudo shutdown -h now` aus.
+- Mechanik: Platziere den Taster an der Gehäusefront, ggf. mit Schutzabdeckung, um unbeabsichtigte Betätigungen zu vermeiden.
 
 ## Aufbau auf Lochrasterplatte (empfohlene Reihenfolge)
 1. Markiere die Position der 2×20 Stiftleiste (GPIO‑Header). Lötbuchsen/Leiste so setzen, dass beim Einbau die Verbindung zum Pi ohne Zug möglich ist.

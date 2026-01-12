@@ -6,6 +6,10 @@ LED_KOMMEN = 22
 LED_GEHEN = 23
 LED_EXTERN = 26
 
+# Shutdown-Button: Taster zum sauberen Herunterfahren des Pi (GPIO gegen GND, lange drücken)
+# Empfohlen: BCM4 (physical pin 7) - frei und oft verwendet für benutzerdefinierte Taster
+SHUTDOWN_BTN = 4
+
 BTN_INFO = 5
 BTN_KOMMEN = 6
 BTN_GEHEN = 13

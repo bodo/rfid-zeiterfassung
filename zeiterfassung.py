@@ -6,6 +6,8 @@ from datetime import datetime
 import time
 import argparse
 import logging
+import threading
+import subprocess
 try:
     # RC522 reader wrapper (uses `mfrc522` low-level API)
     from hw.rc522_reader import RC522Reader
@@ -13,7 +15,7 @@ except Exception:
     RC522Reader = None
 
 from config.db_schema import CLIENT_SCHEMA, init_db as init_db_file
-from config.pin_config import LED_COMMON_ANODE
+from config.pin_config import LED_COMMON_ANODE, SHUTDOWN_BTN
 try:
     from hw.lcd_i2c import LCDDisplay
 except Exception:
@@ -107,6 +109,8 @@ def main_loop(simulate_input=True):
     print("Zeiterfassung gestartet. 'q' zum Beenden.")
     lcd = None
     leds = None
+    shutdown_monitor = None
+    _shutdown_stop_event = None
     if LCDDisplay is not None:
         try:
             lcd = LCDDisplay()
@@ -118,6 +122,40 @@ def main_loop(simulate_input=True):
             leds = LEDController()
         except Exception:
             leds = None
+    # Setup optional shutdown button monitor (requires RPi.GPIO available)
+    if SHUTDOWN_BTN is not None:
+        try:
+            import RPi.GPIO as GPIO
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(SHUTDOWN_BTN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            _shutdown_stop_event = threading.Event()
+
+            def _shutdown_poller(stop_event):
+                """Pollt den Shutdown-Taster und führt bei langem Drücken (>=2s) einen sauberen Shutdown aus."""
+                while not stop_event.is_set():
+                    try:
+                        if GPIO.input(SHUTDOWN_BTN) == 0:
+                            # Button gedrückt: require hold for 2s
+                            t0 = time.time()
+                            while time.time() - t0 < 2.0:
+                                if GPIO.input(SHUTDOWN_BTN) == 1:
+                                    break
+                                time.sleep(0.1)
+                            else:
+                                logging.info("Shutdown-Button gehalten -> fahre herunter")
+                                try:
+                                    subprocess.run(["sudo", "shutdown", "-h", "now"]) 
+                                except Exception as e:
+                                    logging.error("Shutdown command failed: %s", e)
+                                return
+                        time.sleep(0.1)
+                    except Exception:
+                        time.sleep(0.5)
+
+            shutdown_monitor = threading.Thread(target=_shutdown_poller, args=(_shutdown_stop_event,), daemon=True)
+            shutdown_monitor.start()
+        except Exception as e:
+            logging.warning("Shutdown button init fehlgeschlagen: %s", e)
     try:
         while True:
             if simulate_input:
@@ -223,6 +261,22 @@ def main_loop(simulate_input=True):
     except KeyboardInterrupt:
         pass
     finally:
+        # Stop shutdown monitor and cleanup GPIO if used
+        try:
+            if _shutdown_stop_event is not None:
+                _shutdown_stop_event.set()
+            if shutdown_monitor is not None:
+                shutdown_monitor.join(timeout=1.0)
+        except Exception:
+            pass
+        try:
+            import RPi.GPIO as GPIO
+            try:
+                GPIO.cleanup()
+            except Exception:
+                pass
+        except Exception:
+            pass
         conn.close()
         print("Beende Zeiterfassung.")
 
