@@ -22,6 +22,7 @@ Hinweis zur Nummerierung: In der Software werden GPIOs mit BCM‑Nummern verwend
 - `LED_READY_RED`   = BCM27 (physical pin 13)
 - `LED_KOMMEN`      = BCM22 (physical pin 15)
 - `LED_GEHEN`       = BCM23 (physical pin 16)
+- `LED_EXTERN`      = BCM26 (physical pin 37) #Gelbe LED für "Extern Termin"
 - `BTN_INFO`        = BCM5  (physical pin 29)
 - `BTN_KOMMEN`      = BCM6  (physical pin 31)
 - `BTN_GEHEN`       = BCM13 (physical pin 33)
@@ -34,6 +35,24 @@ Hinweis zur Nummerierung: In der Software werden GPIOs mit BCM‑Nummern verwend
 - `PN532_SPI_CS`    = BCM8  (physical pin 24)
 - `PN532_RSTO`      = BCM24 (physical pin 18)
 - `PN532_IRQ`       = BCM25 (physical pin 22)
+
+ - `LED_READY_GREEN` = BCM17 (physical pin 11)  # Status: Gerät bereit (grün)
+ - `LED_READY_RED`   = BCM27 (physical pin 13)  # Status: Fehler/Alarm (rot)
+ - `LED_KOMMEN`      = BCM22 (physical pin 15)  # Aktion: Kommen (kurzes Blink/Anzeigen)
+ - `LED_GEHEN`       = BCM23 (physical pin 16)  # Aktion: Gehen (kurzes Blink/Anzeigen)
+ - `LED_EXTERN`      = BCM26 (physical pin 37)  # Gelbe LED für "Extern Termin"
+ - `BTN_INFO`        = BCM5  (physical pin 29)  # Taste: Info/Menu anzeigen
+ - `BTN_KOMMEN`      = BCM6  (physical pin 31)  # Taste: Manuelle Kommen‑Eingabe
+ - `BTN_GEHEN`       = BCM13 (physical pin 33)  # Taste: Manuelle Gehen‑Eingabe
+ - `BTN_EXT_TERM`    = BCM19 (physical pin 35)  # Taste: Externer Termin / Extern‑Modus
+ - `I2C_SDA`         = BCM2  (physical pin 3, SDA)
+ - `I2C_SCL`         = BCM3  (physical pin 5, SCL)
+ - `PN532_SPI_MOSI`  = BCM10 (physical pin 19)
+ - `PN532_SPI_MISO`  = BCM9  (physical pin 21)
+ - `PN532_SPI_SCLK`  = BCM11 (physical pin 23)
+ - `PN532_SPI_CS`    = BCM8  (physical pin 24)
+ - `PN532_RSTO`      = BCM24 (physical pin 18)
+ - `PN532_IRQ`       = BCM25 (physical pin 22)
 
 ### Raspberry Pi 3 Unterstützung
 - Die Verdrahtung und das Layout unterstützen alternativ einen Raspberry Pi 3 (Model B/B+). In den meisten Fällen sind die Montagebohrungen und der 40‑Pin Header kompatibel mit Pi 4, prüfe aber die Abstände vor dem finalen Gehäusedruck.
