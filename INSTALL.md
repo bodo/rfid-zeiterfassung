@@ -354,6 +354,24 @@ sudo cp systemd/zeiterfassung.service /etc/systemd/system/zeiterfassung.service
 sudo systemctl daemon-reload
 sudo systemctl enable --now zeiterfassung.service
 
+## Shutdown‑Button: `sudoers`‑Eintrag (optional)
+
+Wenn das Terminal als Nicht‑Root‑User läuft (z. B. `User=pi` in der systemd‑Unit), benötigt der Benutzer normalerweise ein Passwort, um `shutdown` auszuführen. Für den Shutdown‑Taster ist es praktisch, dem Service‑User das Recht zu geben, genau das Shutdown‑Kommando ohne Passwort zu starten.
+
+Beispiel (als root ausführen, ersetze `pi` durch den gewählten Service‑User falls nötig):
+```sh
+sudo tee /etc/sudoers.d/zeiterfassung-shutdown > /dev/null <<'EOF'
+pi ALL=(root) NOPASSWD: /sbin/shutdown, /sbin/poweroff, /sbin/halt
+EOF
+sudo chmod 440 /etc/sudoers.d/zeiterfassung-shutdown
+```
+
+Hinweis:
+- Beschränke die erlaubten Kommandos genau (wie oben), statt ein generelles NOPASSWD zu setzen.
+- Prüfe den Pfad zu `shutdown` auf Deinem System (`which shutdown`), passe `/sbin/shutdown` ggf. an.
+- Achte auf Dateiberechtigungen (`440`) und vermeide Erweiterungen, die unbeabsichtigte Rechte eröffnen.
+
+
 # Hinweis: Passe /etc/tjp_env oder /etc/time_shared_secret vor dem Start an.
 ```
 
