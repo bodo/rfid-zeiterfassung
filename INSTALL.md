@@ -8,6 +8,12 @@ Wichtig: Secrets nicht ins Repo committen. Alle Befehle als Nutzer mit passenden
 - Optional: I2C, SPI aktivieren (raspi-config)
 - Pakete:
   - sudo apt update && sudo apt install -y python3 python3-venv python3-pip git i2c-tools
+  
+    # Zusätzliche empfohlene RPi‑Pakete (Hardware/GPIO/I2C)
+    # Empfohlen auf dem Pi zu installieren, vermeidet Fallback‑Warnungen und stellt native Backends bereit
+    # (führt GPIO- und I2C‑Bibliotheken systemweit ein)
+    # Beispiel:
+    # sudo apt update && sudo apt install -y python3-gpiozero python3-rpi.gpio python3-lgpio python3-smbus i2c-tools
 
 ## 2. Projekt auschecken
 cd /opt
