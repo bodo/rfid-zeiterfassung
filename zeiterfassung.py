@@ -120,6 +120,7 @@ def main_loop(simulate_input=True):
     if LEDController is not None:
         try:
             leds = LEDController()
+            leds.ready_on()
         except Exception:
             leds = None
     # Setup optional shutdown button monitor (requires RPi.GPIO available)

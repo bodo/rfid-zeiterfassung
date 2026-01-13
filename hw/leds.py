@@ -35,12 +35,14 @@ class LEDController:
         self._kommen = None
         self._gehen = None
         self._extern = None
+        self._common_anode = bool(LED_COMMON_ANODE)
         if _GPIO_BACKEND == 'gpiozero':
-            self._ready = LED(LED_READY_GREEN)
-            self._ready_red = LED(LED_READY_RED)
-            self._kommen = LED(LED_KOMMEN)
-            self._gehen = LED(LED_GEHEN)
-            self._extern = LED(LED_EXTERN)
+            active_high = not self._common_anode
+            self._ready = LED(LED_READY_GREEN, active_high=active_high)
+            self._ready_red = LED(LED_READY_RED, active_high=active_high)
+            self._kommen = LED(LED_KOMMEN, active_high=active_high)
+            self._gehen = LED(LED_GEHEN, active_high=active_high)
+            self._extern = LED(LED_EXTERN, active_high=active_high)
         elif _GPIO_BACKEND == 'rpi':
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(LED_READY_GREEN, GPIO.OUT)
@@ -61,8 +63,6 @@ class LEDController:
             self._gehen = _NullLED()
             self._extern = _NullLED()
 
-        self._common_anode = bool(LED_COMMON_ANODE)
-
     def _on(self, led):
         if _GPIO_BACKEND == 'gpiozero':
             led.on()
@@ -79,6 +79,18 @@ class LEDController:
             _, pin = led
             GPIO.output(pin, GPIO.HIGH if self._common_anode else GPIO.LOW)
         else:
+            pass
+
+    def ready_on(self):
+        try:
+            self._on(self._ready)
+        except Exception:
+            pass
+
+    def ready_off(self):
+        try:
+            self._off(self._ready)
+        except Exception:
             pass
 
     def flash(self, event: str, duration: float = 0.8):

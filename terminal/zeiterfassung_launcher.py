@@ -20,7 +20,7 @@ import zeiterfassung as terminal_mod  # type: ignore
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Launcher für das Terminal. Leitet Argumente an das Zeiterfassungsmodul weiter.")
-    parser.add_argument("--real-reader", action="store_true", help="Echten Reader verwenden (SPI/I2C Hardware)")
+    parser.add_argument("--test-reader", action="store_true", help="Test-/Simulationsmodus: Eingaben per Konsole (statt echten Reader)")
     args = parser.parse_args()
-    # Delegiere an die vorhandene main_loop / CLI
-    terminal_mod.main_loop(simulate_input=not args.real_reader)
+    # Default: real reader (echte Hardware). Mit --test-reader wird auf Simulationsmodus umgeschaltet.
+    terminal_mod.main_loop(simulate_input=args.test_reader)

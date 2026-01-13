@@ -67,11 +67,12 @@ class LCDDisplay:
     def show_message(self, line1: str, line2: str = ''):
         try:
             self._lcd.clear()
-            with self._lcd.cursor_pos((0, 0)):
-                self._lcd.write_string(line1[:16])
+            # RPLCD uses a cursor_pos property, not a context manager.
+            self._lcd.cursor_pos = (0, 0)
+            self._lcd.write_string(line1[:16])
             if line2:
-                with self._lcd.cursor_pos((1, 0)):
-                    self._lcd.write_string(line2[:16])
+                self._lcd.cursor_pos = (1, 0)
+                self._lcd.write_string(line2[:16])
         except Exception:
             # ignore display errors
             pass
