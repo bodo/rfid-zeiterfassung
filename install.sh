@@ -101,7 +101,8 @@ install_systemd_units() {
     echo "Kopiert: $dest"
   done
   sudo systemctl daemon-reload
-  echo "Systemd units kopiert. Du kannst sie jetzt aktivieren (z.B. sudo systemctl enable --now zeiterfassung.service)"
+  sudo systemctl enable --now zeiterfassung.service
+  echo "Systemd units kopiert und aktiviert. Du kannst den auto-startt deaktivieren mit  sudo systemctl disable --now zeiterfassung.service)"  
 }
 
 open_readme() {

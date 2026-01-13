@@ -5,6 +5,7 @@ und startet die vorhandene zeiterfassung.py.
 """
 from pathlib import Path
 import sys
+import argparse
 
 project_root = Path(__file__).resolve().parents[1]
 if str(project_root) not in sys.path:
@@ -13,5 +14,8 @@ if str(project_root) not in sys.path:
 import zeiterfassung as terminal_mod  # type: ignore
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Launcher für das Terminal. Leitet Argumente an das Zeiterfassungsmodul weiter.")
+    parser.add_argument("--real-reader", action="store_true", help="Echten Reader verwenden (SPI/I2C Hardware)")
+    args = parser.parse_args()
     # Delegiere an die vorhandene main_loop / CLI
-    terminal_mod.main_loop(simulate_input=True)
+    terminal_mod.main_loop(simulate_input=not args.real_reader)
