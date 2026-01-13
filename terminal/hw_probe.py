@@ -4,6 +4,12 @@ Minimaler Hardware-Test für LCD + READY-LED.
 Auf dem Raspberry Pi ausführen.
 """
 import time
+import sys
+from pathlib import Path
+
+project_root = Path(__file__).resolve().parents[1]
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
 
 from hw.lcd_i2c import LCDDisplay
 from hw.leds import LEDController
