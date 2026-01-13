@@ -1,0 +1,9 @@
+# Example sudoers file for the Zeiterfassung service
+# Install to /etc/sudoers.d/zeiterfassung-shutdown (as root)
+# Replace 'pi' with the actual service user if different.
+
+pi ALL=(root) NOPASSWD: /sbin/shutdown, /sbin/poweroff, /sbin/halt
+
+# After installing, set strict permissions:
+# sudo chmod 440 /etc/sudoers.d/zeiterfassung-shutdown
+# Verify with: sudo visudo -cf /etc/sudoers.d/zeiterfassung-shutdown
