@@ -127,10 +127,37 @@ git_pull_repo() {
     echo "Kein Git-Repo in $repo (.git fehlt). Überspringe." >&2
     return 1
   fi
-  git -C "$repo" pull --rebase || {
-    echo "git pull schlug fehl in $repo. Möglicherweise fehlen Berechtigungen. Versuche mit sudo?" >&2
+  # If there are unstaged or uncommitted changes, try to auto-stash before pulling.
+  status=$(git -C "$repo" status --porcelain)
+  stashed=false
+  if [ -n "$status" ]; then
+    echo "Lokale Änderungen im Repo $repo erkannt. Versuche, Änderungen temporär zu stashen..."
+    if git -C "$repo" stash push -u -m "autostash by updater.sh" >/dev/null 2>&1; then
+      stashed=true
+      echo "Änderungen gestasht. Führe Pull --rebase aus."
+    else
+      echo "Konnte Änderungen nicht stashen. Bitte stash/commit/restore manuell und führe updater.sh erneut aus." >&2
+      return 4
+    fi
+  fi
+
+  if git -C "$repo" pull --rebase; then
+    echo "git pull --rebase erfolgreich in $repo"
+    if [ "$stashed" = true ]; then
+      echo "Versuche, gestashte Änderungen wiederherzustellen (git stash pop)..."
+      if ! git -C "$repo" stash pop; then
+        echo "Warnung: git stash pop schlug fehl. Prüfe $repo und führe 'git stash list' aus." >&2
+      fi
+    fi
+  else
+    echo "git pull schlug fehl in $repo. Versuche, Rebase/Conflict-Status zu prüfen." >&2
+    # If we had stashed, attempt to pop to return working tree to previous state
+    if [ "$stashed" = true ]; then
+      echo "Versuche, gestashte Änderungen wiederherzustellen (git stash pop)..."
+      git -C "$repo" stash pop || true
+    fi
     return 3
-  }
+  fi
   return 0
 }
 

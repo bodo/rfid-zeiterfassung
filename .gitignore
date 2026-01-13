@@ -2,3 +2,7 @@
 raspberry_pi_rfid_sync_service.py
 raspberry_pi_rfid_sync_service.py_bak
 .DS_Store
+data/zeiterfassung.db
+__pycache__/
+config/__pycache__/
+hw/__pycache__/
